@@ -1,4 +1,6 @@
-p #{title} 
-p this is a sample page using Pug templating engine
+p #{title}
 h1 #{username}
-p #{tweets}
+p #{tweetcount}
+
+each tweet in tweets
+  li= tweet.id_str + ' ' + tweet.text + ' ' + tweet.created_at

@@ -9,7 +9,6 @@ app.get('/', function(req, res) {
     username = req.query.username;
     renderHistogram(username, res);
   }
-  
 });
 
 app.listen(3000, function() { 
@@ -18,7 +17,7 @@ app.listen(3000, function() {
 
 var renderHistogram = function (username, res){
     var twit = require('twit');
-    var config = require('./creds.json');
+    var config = require('./credentials.json');
     console.log(config);
     var client = new twit({
         consumer_key: config.tw_consumer_key,
@@ -26,19 +25,44 @@ var renderHistogram = function (username, res){
         access_token: config.tw_access_token,
         access_token_secret: config.tw_access_token_secret
     });
-    var params = {screen_name: 'norvinyecla', count: 100};
+    var params = {screen_name: username, count: 200};
     client.get('statuses/user_timeline', params, function(error, tweets, response){
         if (!error){
-            console.log(tweets);
-            res.render('index', { 
-                title: 'Welcome to Tw-Graph', 
-                username: username,
-                tweets: tweets
+            allTweets = tweets;
+            lastId = tweets[tweets.length - 1].id_str;
+
+            var params = {screen_name: username, count: 200, since_id: lastId};
+            client.get('statuses/user_timeline', params, function(error, tweets, response){
+                if (!error){
+                    allTweets = allTweets.concat(tweets);
+                    lastId = tweets[tweets.length - 1].id_str;
+                    var params = {screen_name: username, count: 200, since_id: lastId};
+                    client.get('statuses/user_timeline', params, function(error, tweets, response){
+                        if (!error){
+                            allTweets = allTweets.concat(tweets);
+                            if (allTweets.length > 500){
+                                allTweets = allTweets.slice(0, 500);
+                            }
+                            
+                            res.render('index.pug', {
+                                title: 'Tweets from ' + username,
+                                username: username,
+                                tweets: allTweets,
+                                tweetcount: allTweets.length
+                            });
+                        }
+                        else {
+                            console.log(error)
+                        }
+                    });
+                }
+                else {
+                    console.log(error)
+                }
             });
         }
         else {
             console.log(error)
         }
-    });
-    
+    })
 }

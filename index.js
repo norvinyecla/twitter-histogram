@@ -3,8 +3,14 @@ var app = express();
 app.set('view engine', 'pug');
 
 app.get('/', function(req, res) {
-  res.render('index',
-	{ title: 'Welcome to Tw-Graph' } );
+  var username = "no username entered";
+  if (req.query.username){
+  	username = req.query.username;
+  }
+  res.render('index', { 
+    title: 'Welcome to Tw-Graph', 
+    username: username
+  } );
 });
 
 app.listen(3000, function() { 

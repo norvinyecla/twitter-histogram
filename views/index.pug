@@ -2,5 +2,5 @@ p #{title}
 h1 #{username}
 p #{tweetcount}
 
-each tweet in tweets
-  li= tweet.id_str + ' ' + tweet.text + ' ' + tweet.created_at
+each val, index in tweets
+  li= index + ' => ' + val

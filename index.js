@@ -44,10 +44,11 @@ var renderHistogram = function (username, res){
                                 allTweets = allTweets.slice(0, 500);
                             }
                             
+                            distilledTweets = distillTweets(allTweets)
                             res.render('index.pug', {
                                 title: 'Tweets from ' + username,
                                 username: username,
-                                tweets: allTweets,
+                                tweets: distilledTweets,
                                 tweetcount: allTweets.length
                             });
                         }
@@ -65,4 +66,17 @@ var renderHistogram = function (username, res){
             console.log(error)
         }
     })
+}
+
+var distillTweets = function(tweets){
+    var list = {};
+    tweets.forEach(function(tweet){
+        var date = new Date(Date.parse(tweet.created_at));
+        var hour = date.getHours();
+        console.log(hour);
+
+        if (list[hour]) list[hour]++;
+        else list[hour] = 1; 
+    });
+    return list;
 }

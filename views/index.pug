@@ -1,6 +1,25 @@
-p #{title}
-h1 #{username}
-p #{tweetcount}
+html
+    head
+        title #{username}'s Tweet Activity
+        link(rel="stylesheet", href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css")
+        script(src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js")
 
-each val, index in tweets
-  li= index + ' => ' + val
+    body
+        p #{title}
+
+        div(class="ct-chart ct-minor-sixth")
+            script.
+                var allTweets = !{JSON.stringify(tweets)};
+                labelsValues = Object.keys(allTweets)
+                seriesValues = Object.values(allTweets)
+                var data = {
+                  labels: labelsValues,
+                  series: [seriesValues]
+                };
+
+                var options = {
+                  width: 800,
+                  height: 400
+                };
+
+                new Chartist.Line('.ct-chart', data, options);

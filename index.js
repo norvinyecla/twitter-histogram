@@ -1,8 +1,10 @@
 var express = require('express');
 var twit = require('twit');
+var path = require('path');
 var app = express();
-app.set('view engine', 'pug');
 
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('view engine', 'pug');
 app.get('/', function(req, res) {
   var username = "no username entered";
   if (req.query.username){
@@ -18,7 +20,6 @@ app.listen(3000, function() {
 var renderHistogram = function (username, res){
     var twit = require('twit');
     var config = require('./credentials.json');
-    console.log(config);
     var client = new twit({
         consumer_key: config.tw_consumer_key,
         consumer_secret: config.tw_consumer_secret,
@@ -73,7 +74,6 @@ var distillTweets = function(tweets){
     tweets.forEach(function(tweet){
         var date = new Date(Date.parse(tweet.created_at));
         var hour = date.getHours();
-        console.log(hour);
 
         if (list[hour]) list[hour]++;
         else list[hour] = 1; 

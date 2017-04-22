@@ -1,0 +1,14 @@
+{
+  "name": "tw-histogram",
+  "version": "1.0.0",
+  "description": "Show a histogram of a users' tweets.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "norvin yecla",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}

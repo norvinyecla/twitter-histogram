@@ -13,13 +13,17 @@ app.get('/', function(req, res) {
     res.render('index.pug', {title: 'Welcome to Twitter Histogram'});
 });
 
+app.get('/tweets', function(req, res) {
+    res.render('index.pug', {title: 'Welcome to Twitter Histogram'});
+});
+
 app.post('/tweets', function(req, res) {
     if (req.body.username){
         username = req.body.username;
         renderHistogram(username, res);
     }
     else {
-        res.render('index.pug', {title: 'Please enter a username'});
+        res.render('index.pug', {title: 'Sorry', message: 'Please enter a username'});
     }
 });
 
@@ -74,6 +78,7 @@ var renderHistogram = function (username, res){
             });
         }
         else {
+            res.render('index.pug', {title: 'Sorry', message: 'We cannot find that! Please enter another username'});
             console.log(error)
         }
     })
@@ -89,4 +94,27 @@ var distillTweets = function(tweets){
         else list[hour] = 1; 
     });
     return list;
+}
+
+var isUsernameValid = function(username){
+    var twit = require('twit');
+    var config = require('./credentials.json');
+    var client = new twit({
+        consumer_key: config.tw_consumer_key,
+        consumer_secret: config.tw_consumer_secret,
+        access_token: config.tw_access_token,
+        access_token_secret: config.tw_access_token_secret
+    });
+    var params = {screen_name: username};
+    client.get('users/lookup', params, function(error, data, response){
+        console.log(username)
+        console.log(data)
+        if (!error){
+            return true;
+        }
+        else {
+            console.log(error)
+            return false;
+        }
+    })
 }

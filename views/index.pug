@@ -1,4 +1,18 @@
-p #{title} 
-p this is a sample page using Pug templating engine
-h1 #{username}
-p #{tweets}
+html
+    head
+        title Twitter Histogram
+        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css')
+    
+    body
+        div(class='container')
+            div(class='row')
+                h3 #{title}
+                p #{message}
+
+            form(method='POST', action='/tweets')
+                div(class='row')
+                    label(for='username') Username:
+                div(class='row')
+                    input#username.form-control(type='text', placeholder='Enter username', name='username')
+                div(class='row')
+                    button.btn.btn-primary(type='submit') Get tweets

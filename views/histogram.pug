@@ -1,0 +1,39 @@
+html
+    head
+        title #{username}'s Tweet Activity
+        link(rel='stylesheet', href='//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css')
+        script(src='//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js')
+
+        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css')
+    body
+        div(class='container')
+            div(class='row')
+                h3 #{title}
+
+
+            form(method='POST', action='/tweets')
+                div(class='row')
+                    label(for='username') Username:
+                div(class='row')
+                    input#username.form-control(type='text', placeholder='Enter username', name='username')
+                div(class='row')
+                    button.btn.btn-primary(type='submit') Get tweets
+
+            p This only shows the most recent 500 tweets.
+            
+            div(class='ct-chart ct-minor-sixth')
+                script.
+                    var allTweets = !{JSON.stringify(tweets)};
+                    labelsValues = Object.keys(allTweets)
+                    seriesValues = Object.values(allTweets)
+                    var data = {
+                      labels: labelsValues,
+                      series: [seriesValues]
+                    };
+
+                    var options = {
+                      width: 800,
+                      height: 400
+                    };
+
+                    new Chartist.Line('.ct-chart', data, options);

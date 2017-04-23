@@ -1,16 +1,26 @@
 var express = require('express');
 var twit = require('twit');
 var path = require('path');
+var bodyParser = require('body-parser');
 var app = express();
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.urlencoded({extended: true}))
 app.set('view engine', 'pug');
+
+
 app.get('/', function(req, res) {
-  var username = "no username entered";
-  if (req.query.username){
-    username = req.query.username;
-    renderHistogram(username, res);
-  }
+    res.render('index.pug', {title: 'Welcome to Twitter Histogram'});
+});
+
+app.post('/tweets', function(req, res) {
+    if (req.body.username){
+        username = req.body.username;
+        renderHistogram(username, res);
+    }
+    else {
+        res.render('index.pug', {title: 'Please enter a username'});
+    }
 });
 
 app.listen(3000, function() { 
@@ -46,7 +56,7 @@ var renderHistogram = function (username, res){
                             }
                             
                             distilledTweets = distillTweets(allTweets)
-                            res.render('index.pug', {
+                            res.render('histogram.pug', {
                                 title: 'Tweets from ' + username,
                                 username: username,
                                 tweets: distilledTweets,

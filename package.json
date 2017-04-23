@@ -9,6 +9,7 @@
   "author": "norvin yecla",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "pug": "^2.0.0-beta.12",
     "twit": "^2.2.5"
